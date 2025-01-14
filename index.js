@@ -9,13 +9,13 @@ let mqttClient = mqtt.connect(`mqtt://${process.env.BROKER_MQTT || 'test.mosquit
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const SCHEDULE_FILE = path.join(__dirname, 'schedule.json');
+const SCHEDULE_FILE = path.join(__dirname, 'schedule', 'schedule.json');
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 let lampOnSchedule = null;
@@ -28,7 +28,7 @@ function publishToBroker(lampStatus) {
       console.log("MQTT ERROR: " + error);
       result = false;
     } else {
-      saveScheduleToFile(lampStatus.toUpperCase(), lampOnSchedule.cronTime.source, lampOffSchedule.cronTime.source);
+      saveScheduleToFile(lampStatus.toUpperCase(), lampOnSchedule !== null ? lampOnSchedule.cronTime.source : null, lampOffSchedule !== null ? lampOffSchedule.cronTime.source : null);
       result = true;
     }
   })
@@ -148,7 +148,7 @@ app.post('/set-lamp', (req, res) => {
   }
 
   if (publishToBroker(lampStatus.toUpperCase())) {
-    saveScheduleToFile(lampStatus, lampOnSchedule.cronTime.source, lampOffSchedule.cronTime.source);
+    saveScheduleToFile(lampStatus, lampOnSchedule !== null ? lampOnSchedule.cronTime.source : null, lampOffSchedule !== null ? lampOffSchedule.cronTime.source : null);
   } else {
     return res.status(503).json({ error: 'mqtt error' });
   }
