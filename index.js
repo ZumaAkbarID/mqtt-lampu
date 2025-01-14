@@ -9,13 +9,13 @@ let mqttClient = mqtt.connect(`mqtt://${process.env.BROKER_MQTT || 'test.mosquit
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const SCHEDULE_FILE = path.join(__dirname, 'public', 'schedule', 'schedule.json');
+const SCHEDULE_FILE = path.join(process.cwd(), 'schedule', 'schedule.json');
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
 });
 
 let lampOnSchedule = null;
