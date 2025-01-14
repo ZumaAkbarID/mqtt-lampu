@@ -9,7 +9,7 @@ let mqttClient = mqtt.connect(`mqtt://${process.env.BROKER_MQTT || 'test.mosquit
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const SCHEDULE_FILE = path.join(__dirname, 'schedule', 'schedule.json');
+const SCHEDULE_FILE = path.join(__dirname, 'public', 'schedule', 'schedule.json');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
