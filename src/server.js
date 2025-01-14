@@ -28,6 +28,7 @@ function publishToBroker(lampStatus) {
       console.log("MQTT ERROR: " + error);
       result = false;
     } else {
+      saveScheduleToFile(lampStatus.toUpperCase(), lampOnSchedule.cronTime.source, lampOffSchedule.cronTime.source);
       result = true;
     }
   })
@@ -147,7 +148,6 @@ app.post('/set-lamp', (req, res) => {
   }
 
   if (publishToBroker(lampStatus.toUpperCase())) {
-    console.log(lampOffSchedule.cronTime.source);
     saveScheduleToFile(lampStatus, lampOnSchedule.cronTime.source, lampOffSchedule.cronTime.source);
   } else {
     return res.status(503).json({ error: 'mqtt error' });

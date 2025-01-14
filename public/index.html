@@ -101,9 +101,9 @@
       const client = mqtt.connect("wss://test.mosquitto.org:8081/mqtt")
 
       client.on("connect", () => {
-        client.subscribe("TOPIC", (err) => {
+        client.subscribe("HALO_DEK", (err) => {
           if (!err) {
-            client.publish("TOPIC", "Hello DEK");
+            client.publish("HALO_DEK", "Hello DEK");
           }
         });
       });
